@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import * as uuid from 'uuid/uuid';
+// import * as uuid from 'uuid/uuid';
 
 import * as fromRoot from '../../core/store';
 import { Note } from '../../core/store/note/note.model';
@@ -17,17 +17,19 @@ import * as EntityActions from '../../core/store/entity/entity.actions';
 export class NotesPage implements OnInit {
     notes$: Store<Note[]>;
 
-    constructor(private store: Store<fromRoot.RootState>) {
-    }
+    constructor(private store: Store<fromRoot.RootState>) {}
 
     onAddNote(colour) {
-        this.store.dispatch(new EntityActions.AddOptimistically(slices.NOTE, {
-            id: uuid.v1(),
-            text: '',
-            colour,
-            left: 200,
-            top: 300
-        }));
+        this.store.dispatch(
+            new EntityActions.AddOptimistically(slices.NOTE, {
+                //id: uuid.v1(),
+                id: 1111111,
+                text: '',
+                colour,
+                left: 200,
+                top: 300
+            })
+        );
     }
 
     onChangeNoteText(newText: string, note: Note) {
@@ -39,12 +41,11 @@ export class NotesPage implements OnInit {
     }
 
     onDelete(note: Note) {
-        this.store.dispatch(new EntityActions.Delete(slices.NOTE, note))
+        this.store.dispatch(new EntityActions.Delete(slices.NOTE, note));
     }
 
     ngOnInit() {
         this.notes$ = this.store.select(fromRoot.getNotes);
         this.store.dispatch(new EntityActions.Load(slices.NOTE));
     }
-
 }
